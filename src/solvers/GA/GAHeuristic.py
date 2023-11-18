@@ -8,18 +8,17 @@ import random
 from copy import deepcopy
 import itertools
 import time as t
-from src.data_structures import instance
+from src.data_structures import Instance
 
 class GAHeuristic:
-	def __init__(self, contSolution, instance: instance, n_chromosomes, penalization, weight):
+	def __init__(self, contSolution, instance: Instance, n_chromosomes, penalization, weight):
 		self.contSolution = contSolution
 		self.instance = instance
 		self.items = list(range(instance.n_items))
 		self.items.sort(key = lambda x: instance.costs[x][1] - instance.costs[x][0], reverse = True)
 		self.solution = []
 		self.population = []
-		synWork=[key.replace("(","").replace(")","").replace("'","").split(",") for key in self.instance.polynomial_gains.keys()]
-		self.synSet=[set(map(int,k)) for k in synWork]
+		self.synSet = list(set(i) for i in self.instance.polynomial_gains.keys())
 		self.counterInf=0
 		self.n_chromosomes=n_chromosomes
 		self.penalization=penalization

@@ -251,3 +251,13 @@ class Instance:
 
     def __str__(self) -> str:
         return f"Instance({self.n_items},{self.gamma},#{hash(self)})"
+
+
+@dataclass
+class Solution:
+    """Clase simple para almacenar soluciones"""
+    o: float
+    sol: ArrayLike
+    time: float
+    def __repr__(self) -> str:
+        return f"Sol(of:{self.o},time:{self.time})"

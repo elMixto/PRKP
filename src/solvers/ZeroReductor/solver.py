@@ -1,42 +1,12 @@
 import torch
 from torch import optim
-from torch import nn
 import time
-import sys
-import torch.nn.utils.prune as prune
 from pathlib import Path
 import numpy as np
 from src.data_structures.features import *
-from src.data_structures import Instance
-from src.solvers.DLHEU2 import DHEU
-from src.solvers.collection import Solution, SolverCollection
-from src.solvers.gurobi.gurobi_solver import SolverConfig
-from copy import deepcopy
-
-
-
-class ActorCritic(nn.Module):
-    def __init__(self, num_states, num_actions, hidden_size=20):
-        super(ActorCritic, self).__init__()
-        
-        self.actor = nn.Sequential(
-            nn.Linear(num_states, hidden_size),
-            nn.ReLU(),
-            nn.Linear(hidden_size, num_actions),
-        )
-        
-        self.critic = nn.Sequential(
-            nn.Linear(num_states, hidden_size),
-            nn.Linear(hidden_size,hidden_size),
-            nn.Linear(hidden_size, 1),
-            nn.Sigmoid()
-        )
-
-    def forward(self, x):
-        # Devolver las probabilidades de las acciones y el valor estimado
-        action_probs = self.actor(x)
-        value = self.critic(x)
-        return action_probs, value
+from src.data_structures import Instance, Solution
+from src.solvers.ZeroReductor.DLHEU2 import DHEU
+from src.Gurobi import SolverConfig,gurobi
 
 class ZeroReductor2:
     def __init__(self,instance: Instance) -> None:
@@ -51,14 +21,13 @@ class ZeroReductor2:
             CountPSynergiesOverNItems(),CountPSynergiesOverBudget(),
             GammaOverNItems(),SumOfSynergiesByItemOverMaxSinergyProfit(),Noise()]
         self.heu = DHEU(self.features)
-        self.heu.load(Path("/home/mixto/repositories/PRKP/models/DHEUV2.model"))
+        model = Path(__file__).resolve().parent / "models/DHEUV2.model"
+        self.heu.load(model)
         self.heu.net.eval()
         #Prediccion inicial
         self.actual_pred: torch.Tensor = self.heu.evaluate(self.instance)
         self.step_size = 1
         self.treshold = 0.3
-        self.actor_critic = ActorCritic(10,2)
-        self.optimizer = optim.Adam(self.actor_critic.parameters(), lr=0.01)
         self.time = 0
         self.n_steps = 0
     
@@ -69,7 +38,7 @@ class ZeroReductor2:
 
         return torch.tensor([
             #1 - actual_sol/optimal_sol, se maximiza cuando actual_sol es igual al optmial_sol
-            1 - (SolverCollection.gurobi(self.instance,SolverConfig.optimal()).o  / self.o_instance.evaluate(self.o_instance.get_feature(IsInOptSol()))),
+            1 - (gurobi(self.instance,SolverConfig.optimal()).o  / self.o_instance.evaluate(self.o_instance.get_feature(IsInOptSol()))),
             #Idealmente deberia comparar con el tiempo que se demora el solver, pero 0.0, eso significa resolver todo denuevo, para ver cuando se demora
             1/self.time
             ])
@@ -135,8 +104,9 @@ class ZeroReductor2:
         self.n_steps += 1
     
     def solve(self):
+        from copy import deepcopy
         start = time.time()
-        solution = SolverCollection.gurobi(self.instance,solver_config=SolverConfig.optimal())
+        solution = gurobi(self.instance,solver_config=SolverConfig.optimal())
         output_global_mask = deepcopy(self.global_mask)
         for index, value in enumerate(solution.sol):
             real_element = int(self.instance_mask[index])

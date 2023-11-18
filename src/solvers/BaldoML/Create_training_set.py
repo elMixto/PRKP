@@ -1,5 +1,5 @@
 import os
-from  src.solvers.gurobi import solve_polynomial_knapsack 
+from src.solvers.Gurobi.gurobi_solver import solve_polynomial_knapsack
 from .functions_ml import countSynergies, create_instances
 import random 
 from pathlib import Path

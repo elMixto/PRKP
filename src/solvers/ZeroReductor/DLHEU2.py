@@ -1,14 +1,11 @@
 from src.data_structures.instance import Instance
 from src.data_structures.features import *
-from src.solvers.collection import SolverCollection
 import torch
 from torch import nn
 import os
 from pathlib import Path
 import sys
 torch.set_default_tensor_type(torch.DoubleTensor)
-
-
 
 
 def encode_bool_vec(a):

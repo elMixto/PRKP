@@ -73,8 +73,8 @@ class IsInContSol(ItemBatchFeature):
         return "IsInContSol"
 
     def batch_evaluate(self,instance: "Instance") -> ArrayLike:
-        from src.solvers.collection import SolverCollection,SolverConfig
-        solution = SolverCollection.gurobi(instance,SolverConfig.continous()).sol
+        from src.Gurobi import SolverConfig,gurobi
+        solution = gurobi(instance,SolverConfig.continous()).sol
         return torch.tensor(solution)
     
 class IsInOptSol(ItemBatchFeature):
@@ -84,8 +84,8 @@ class IsInOptSol(ItemBatchFeature):
         return "IsInOptSol"
     
     def batch_evaluate(self,instance: "Instance") -> ArrayLike:
-        from src.solvers.collection import SolverCollection,SolverConfig
-        return torch.tensor(SolverCollection.gurobi_optimal(instance).sol)
+        from src.Gurobi import SolverConfig,gurobi
+        return torch.tensor(gurobi(instance,SolverConfig.optimal()).sol)
 
 
 class ProfitOverBudget(ItemSingleFeature,ItemBatchFeature):
@@ -199,9 +199,9 @@ class IsInFirstFactibleSol(ItemBatchFeature):
         return "IsInFirstFactibleSol"
 
     def batch_evaluate(self,instance: "Instance") -> ArrayLike:
-        from src.solvers.collection import SolverCollection,SolverConfig,VAR_TYPE
+        from src.Gurobi import SolverConfig,gurobi,VAR_TYPE
         solver_config = SolverConfig(var_type=VAR_TYPE.BINARY,heuristic=False,indexes=[],first_sol=True)
-        solution = SolverCollection.gurobi(instance,solver_config=solver_config).sol
+        solution = gurobi(instance,solver_config=solver_config).sol
         return torch.tensor(solution)
 
 

@@ -18,8 +18,10 @@ class ZeroReductor2:
         self.features = [
             ProfitOverBudget(),LowerCostOverBudget(),
             UpperCostOverBudget(),IsInContSol(),
-            CountPSynergiesOverNItems(),CountPSynergiesOverBudget(),
-            GammaOverNItems(),SumOfSynergiesByItemOverMaxSinergyProfit(),Noise()]
+            #CountPSynergiesOverNItems(),CountPSynergiesOverBudget(),
+            GammaOverNItems(),
+            #SumOfSynergiesByItemOverMaxSinergyProfit(),
+            Noise()]
         self.heu = DHEU(self.features)
         model = Path(__file__).resolve().parent / "models/DHEUV2.model"
         self.heu.load(model)
@@ -99,8 +101,6 @@ class ZeroReductor2:
         indices = self.fix_from_pred(pred,max_step,threshold)
         self.reduce_bulk(indexes=indices)
         self.time += time.time() - start
-        #sys.stdout.write(f"\rThreshold:{threshold}, StepSize: {max_step},  Actual pred:{torch.min(pred)}")
-        #sys.stdout.flush()
         self.n_steps += 1
     
     def solve(self):

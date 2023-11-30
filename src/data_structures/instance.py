@@ -111,7 +111,10 @@ class Instance:
         profits = np.array(json_file['profits'])
         costs = np.array(json_file['costs'])
         polynomial_gains = json_file['polynomial_gains']
-        features = json_file['features']
+        if 'features' in json_file.keys():
+            features = json_file['features']
+        else:
+            features = {}
         instance = cls(n_items,gamma,budget,profits,costs,polynomial_gains,features)
         return instance
 

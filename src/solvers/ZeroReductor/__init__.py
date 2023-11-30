@@ -8,15 +8,18 @@ from .solver import ZeroReductor2
 import torch
 from time import time
 from src.Gurobi import gurobi,VAR_TYPE,SolverConfig
+import numpy as np
 
-def solve(instance: Instance,pred_threshold: float = 0.01) -> Solution:
-    model = Path(__file__).resolve().parent / "models/DHEUV2_expanded.model"
+def solve(instance: Instance,pred_threshold: float = 0.01,verbose=False) -> Solution:
+    model = Path(__file__).resolve().parent / "models/DHEUV2_extended.model"
+    #model = Path(__file__).resolve().parent / "models/DHEUV2.model"
     features = [
         ProfitOverBudget(),LowerCostOverBudget(),
         UpperCostOverBudget(),IsInContSol(),
-        CountPSynergiesOverNItems(),
-        CountPSynergiesOverBudget(),GammaOverNItems(),
-        SumOfSynergiesByItemOverMaxSinergyProfit(),
+        #CountPSynergiesOverNItems(),
+        #CountPSynergiesOverBudget(),
+        GammaOverNItems(),
+        #SumOfSynergiesByItemOverMaxSinergyProfit(),
         NOverON(instance)]
     heu = DHEU(features)
     heu.load(model)
@@ -24,14 +27,19 @@ def solve(instance: Instance,pred_threshold: float = 0.01) -> Solution:
     zr = ZeroReductor2(instance)
     zr.heu = heu
     done = False
+    heuristic_step = int(instance.n_items//np.log10(instance.n_items))
+    #El tamaño de paso debe ser constante
     while not done:
-        zr.step(max_step=200,threshold=pred_threshold)
+        zr.step(max_step = max(heuristic_step,100) ,threshold=pred_threshold)
+        if verbose:
+            print(zr.instance.n_items)
+            print(torch.min(zr.actual_pred))
         old_n_items = zr.instance.n_items
         if zr.instance.n_items != old_n_items:
             stuck = 0
         else:
             stuck += 1
-        if torch.min(zr.actual_pred) > pred_threshold or stuck > 2 or zr.instance.n_items < 150:
+        if torch.min(zr.actual_pred) > pred_threshold or stuck > 3:
             done = True
     return zr.solve()
 
@@ -52,5 +60,6 @@ def solve_once(instance: Instance) -> Solution:
     preds = torch.stack([1- preds,preds])
     y_ml = fix_variables(instance.n_items, preds.T, 0.85)
     solution = gurobi(instance,SolverConfig(VAR_TYPE.BINARY,True,y_ml))
+    solution = Solution(solution.o,solution.sol,solution.time + time() - start)
     return solution
 

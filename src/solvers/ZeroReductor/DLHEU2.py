@@ -30,7 +30,6 @@ class Net(nn.Module):
             nn.Linear(hidden_size, hidden_size),
             nn.Linear(hidden_size, hidden_size),
             nn.Linear(hidden_size, hidden_size),
-            
             nn.Linear(hidden_size, salida),
             nn.Tanh()
         )

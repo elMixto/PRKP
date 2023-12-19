@@ -9,25 +9,23 @@ import torch
 from time import time
 from src.Gurobi import gurobi,VAR_TYPE,SolverConfig
 import numpy as np
+from .solver import features
 
-def solve(instance: Instance,pred_threshold: float = 0.01,verbose=False) -> Solution:
-    model = Path(__file__).resolve().parent / "models/DHEUV2_extended.model"
+def solve(instance: Instance,pred_threshold: float = 0.01, heuristic_step_proportion = None,verbose=False) -> Solution:
+    model = Path(__file__).resolve().parent / "models/DHEUV2.model"
     #model = Path(__file__).resolve().parent / "models/DHEUV2.model"
-    features = [
-        ProfitOverBudget(),LowerCostOverBudget(),
-        UpperCostOverBudget(),IsInContSol(),
-        #CountPSynergiesOverNItems(),
-        #CountPSynergiesOverBudget(),
-        GammaOverNItems(),
-        #SumOfSynergiesByItemOverMaxSinergyProfit(),
-        NOverON(instance)]
     heu = DHEU(features)
     heu.load(model)
+    heu.net.eval()
     stuck = 0
     zr = ZeroReductor2(instance)
     zr.heu = heu
     done = False
-    heuristic_step = int(instance.n_items//np.log10(instance.n_items))
+    if heuristic_step_proportion is None:
+        heuristic_step = int(zr.instance.n_items/np.log10(zr.instance.n_items))
+    else:
+        heuristic_step = int(zr.instance.n_items*heuristic_step_proportion)
+    
     #El tamaño de paso debe ser constante
     while not done:
         zr.step(max_step = max(heuristic_step,100) ,threshold=pred_threshold)
@@ -58,7 +56,7 @@ def solve_once(instance: Instance) -> Solution:
     heu.load(model)
     preds = heu.evaluate(instance).view(1, -1)[0]
     preds = torch.stack([1- preds,preds])
-    y_ml = fix_variables(instance.n_items, preds.T, 0.85)
+    y_ml = fix_variables(instance.n_items, preds.T, 1-0.85)
     solution = gurobi(instance,SolverConfig(VAR_TYPE.BINARY,True,y_ml))
     solution = Solution(solution.o,solution.sol,solution.time + time() - start)
     return solution

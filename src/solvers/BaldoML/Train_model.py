@@ -13,8 +13,8 @@ output:
 	model classifier
 """
 
-file_path = "/home/mixto/PRKP/src/solvers/MLHeu/model_data/train.csv"
-file_model = '/home/mixto/PRKP/src/solvers/MLHeu/model_data/finalized_model_rTrees.sav'
+file_path = "/home/mixto/repositories/PRKP/src/solvers/BaldoML/model_data/train.csv"
+file_model = '/home/mixto/repositories/PRKP/src/solvers/BaldoML/model_data/finalized_model_rTrees.sav'
 
 df = pd.read_csv(file_path, header = 0)
 df = df._get_numeric_data()

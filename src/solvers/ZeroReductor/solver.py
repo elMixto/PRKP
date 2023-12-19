@@ -3,25 +3,33 @@ from torch import optim
 import time
 from pathlib import Path
 import numpy as np
+from src.Gurobi.gurobi_solver import VAR_TYPE
 from src.data_structures.features import *
 from src.data_structures import Instance, Solution
 from src.solvers.ZeroReductor.DLHEU2 import DHEU
 from src.Gurobi import SolverConfig,gurobi
 
+
+features: list[ItemBatchFeature] = [
+            ProfitOverBudget(),
+            LowerCostOverBudget(),
+            UpperCostOverBudget(),
+            IsInContSol(),
+            GammaOverNItems(),
+            Density(),
+            Noise()
+            ]
+
+
+
 class ZeroReductor2:
     def __init__(self,instance: Instance) -> None:
         self.o_instance = instance
-        self.global_mask = [-1 for i in range(self.o_instance.n_items)]
-        self.instance_mask = [i for i in range(self.o_instance.n_items)]
+        self.global_mask = np.full(self.o_instance.n_items, -1)
+        self.instance_mask = np.arange(self.o_instance.n_items,dtype=np.uint32)
         self.instance: Instance  = self.o_instance
         self.pop_array = lambda array,index: np.concatenate([array[:index],array[index+1:]])
-        self.features = [
-            ProfitOverBudget(),LowerCostOverBudget(),
-            UpperCostOverBudget(),IsInContSol(),
-            #CountPSynergiesOverNItems(),CountPSynergiesOverBudget(),
-            GammaOverNItems(),
-            #SumOfSynergiesByItemOverMaxSinergyProfit(),
-            Noise()]
+        self.features = features
         self.heu = DHEU(self.features)
         model = Path(__file__).resolve().parent / "models/DHEUV2.model"
         self.heu.load(model)
@@ -33,23 +41,6 @@ class ZeroReductor2:
         self.time = 0
         self.n_steps = 0
     
-    
-    def get_reward(self):
-        #A estas cosas eventualmente hay que pasarlas por otra funcion para mas o menos balancear
-        #el peso de cada una, pero sin importar eso, el solver deberia terminar optimizando para ambas
-
-        return torch.tensor([
-            #1 - actual_sol/optimal_sol, se maximiza cuando actual_sol es igual al optmial_sol
-            1 - (gurobi(self.instance,SolverConfig.optimal()).o  / self.o_instance.evaluate(self.o_instance.get_feature(IsInOptSol()))),
-            #Idealmente deberia comparar con el tiempo que se demora el solver, pero 0.0, eso significa resolver todo denuevo, para ver cuando se demora
-            1/self.time
-            ])
-    
-    def get_actions(self):
-        #New step_size, New threshold
-        return torch.tensor([self.step_size//self.instance.n_items,self.treshold])
-
-
     def fix_from_pred(self,pred: torch.Tensor,max_step: int,threshold: float):
         mascara = torch.lt(pred, threshold)
         pred_indexes = torch.nonzero(mascara).squeeze()
@@ -62,34 +53,30 @@ class ZeroReductor2:
         pred_indexes = pred_indexes[indexes]
         if pred_indexes.dim() == 0:
             pred_indexes = pred_indexes.unsqueeze(0)
+        #Es importante retornar los indices de mayor a menor por que asi se pueden ir eliminando
+        #de forma coherente.
         pred_indexes,_ = torch.sort(pred_indexes,descending=True)
         return pred_indexes
 
     def reduce_bulk(self,indexes: list[int]):
         for i, index in enumerate(indexes):
-            self.instance = self.reduce(int(index),0)
+            self.instance = self.reduce(int(index))
 
-    def reduce(self,index,value)->Instance:
-        real_index = int(self.instance_mask[index])
-        self.global_mask[real_index] = value
+    def reduce(self,index)->Instance:
+        real_index = self.instance_mask[index]
+        self.global_mask[real_index] = 0
         new_costs = self.pop_array(self.instance.costs,index)
         new_profits = self.pop_array(self.instance.profits,index)
         self.instance_mask = self.pop_array(self.instance_mask,index)
         new_gains = dict()
-        for tupla,gain in self.instance.polynomial_gains.items():
-            if index in tupla:
-                continue
-            else:
-                new_tupla = []
-                for element in tupla:
-                    if element > index:
-                        new_tupla.append(element-1)
-                    else:
-                        new_tupla.append(element)
-                new_tupla.sort()
-                new_tupla = str(tuple(new_tupla))
-                new_gains[new_tupla] = gain
-        output = Instance(self.instance.n_items-1,self.instance.gamma,self.instance.budget,new_profits,new_costs,new_gains,{})
+        nuevas_tuplas = [tupla for tupla in self.instance.polynomial_gains.keys() if index not in tupla]
+        for tupla in nuevas_tuplas:
+            new_tupla = [element - (element > index) for element in tupla]
+            new_tupla.sort()
+            new_tupla = tuple(new_tupla)
+            new_gains[new_tupla] = self.instance.polynomial_gains[tupla]
+        output = Instance(self.instance.n_items-1,self.instance.gamma,self.instance.budget,new_profits,new_costs,{},{})
+        output.polynomial_gains = new_gains
         return output
         
     def step(self,threshold: float = 0.1,max_step: int = 300):
@@ -106,7 +93,7 @@ class ZeroReductor2:
     def solve(self):
         from copy import deepcopy
         start = time.time()
-        solution = gurobi(self.instance,solver_config=SolverConfig.optimal())
+        solution = gurobi(self.instance,solver_config=SolverConfig(VAR_TYPE.BINARY,False,[],None,600,False))
         output_global_mask = deepcopy(self.global_mask)
         for index, value in enumerate(solution.sol):
             real_element = int(self.instance_mask[index])

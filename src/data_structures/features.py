@@ -77,6 +77,19 @@ class IsInContSol(ItemBatchFeature):
         solution = gurobi(instance,SolverConfig.continous()).sol
         return torch.tensor(solution)
     
+class Density(ItemBatchFeature):
+    """
+    Resuelve la relajacion continua del problema de optimizacion y retorna la solucion para cada uno de los items, si se encuentra o no en la solucion
+    (Usa el solver cacheado para poder reconstruir la trainingdata de forma rapida)
+    """
+    @property
+    def name(self):
+        return "Density"
+
+    def batch_evaluate(self,instance: "Instance") -> ArrayLike:
+        return torch.ones(instance.n_items)*torch.mean(instance.get_feature(IsInContSol()))
+
+    
 class IsInOptSol(ItemBatchFeature):
     """Resuelve la relajacion continua del problema de optimizacion y retorna la solucion para cada uno de los items, si se encuentra o no en la solucion"""
     @property

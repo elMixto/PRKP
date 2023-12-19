@@ -31,7 +31,6 @@ class SolverConfig:
 
 
 def solve_polynomial_knapsack(instance: instance, solver_config: SolverConfig):
-
     n_items = instance.n_items
     items = range(instance.n_items)
     n_hog = len(instance.polynomial_gains)
@@ -100,11 +99,8 @@ def solve_polynomial_knapsack(instance: instance, solver_config: SolverConfig):
     model.optimize()
     end = time.time()
     comp_time = end - start
-    if model.status == GRB.Status.OPTIMAL:
-        sol = [0] * n_items
-        for i in items:
-            grb_var = model.getVarByName("X[{}]".format(i))
-            sol[i] = grb_var.X
-        return model.getObjective().getValue(), sol, comp_time
-    else:
-        return -1, [], comp_time
+    sol = [0] * n_items
+    for i in items:
+        grb_var = model.getVarByName("X[{}]".format(i))
+        sol[i] = grb_var.X
+    return model.getObjective().getValue(), sol, comp_time

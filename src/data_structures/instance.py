@@ -13,6 +13,7 @@ from numpy.typing import ArrayLike,NDArray
 import torch
 from torch import Tensor
 from copy import deepcopy
+import re
 
 class Instance:
     from src.data_structures.features import ItemBatchFeature,ItemSingleFeature
@@ -56,10 +57,9 @@ class Instance:
     
         
     @staticmethod
-    def key_to_tuple(key)-> tuple[int]:
-        """Esta cosa transforma un string de la forma '(1,2,3,4)' a una tupla ordenada de la misma forma """
-        number_list = key.replace("(","").replace(")","").replace("'","").split(",")
-        number_list = [int(i) for i in number_list]
+    def key_to_tuple(key):
+        numbers = re.findall(r'\d+', key)
+        number_list = [int(i) for i in numbers]
         number_list.sort()
         return tuple(number_list)
     

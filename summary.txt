@@ -1,0 +1,251 @@
+BaldoGA Gap
+100: Mean: 1.74 Std: 1.15
+300: Mean: 3.07 Std: 0.905
+500: Mean: 3.04 Std: 0.866
+700: Mean: 3.42 Std: 0.844
+900: Mean: 3.74 Std: 1.09
+1100: Mean: 3.4 Std: 1.07
+1300: Mean: 4.1 Std: 6.89
+1500: Mean: 3.9 Std: 1.18
+
+BaldoGA Time
+100: Mean: 0.44 Std: 0.207
+300: Mean: 3.3 Std: 1.32
+500: Mean: 4.5 Std: 1.75
+700: Mean: 7.18 Std: 2.93
+900: Mean: 9.86 Std: 4.08
+1100: Mean: 5.61 Std: 2.19
+1300: Mean: 7.22 Std: 2.44
+1500: Mean: 8.89 Std: 3.21
+
+
+BaldoML Gap
+100: Mean: 0.15 Std: 0.339
+300: Mean: 0.0723 Std: 0.151
+500: Mean: 0.0751 Std: 0.202
+700: Mean: 0.105 Std: 0.218
+900: Mean: 0.037 Std: 0.0736
+1100: Mean: 1.03 Std: 10.0
+1300: Mean: 2.01 Std: 14.0
+1500: Mean: 2.02 Std: 14.0
+
+BaldoML Gap
+100: Mean: 0.15 Std: 0.339
+300: Mean: 0.0723 Std: 0.151
+500: Mean: 0.0751 Std: 0.202
+700: Mean: 0.105 Std: 0.218
+900: Mean: 0.037 Std: 0.0736
+1100: Mean: 1.03 Std: 10.0
+1300: Mean: 2.01 Std: 14.0
+1500: Mean: 2.02 Std: 14.0
+
+BaldoML Time
+100: Mean: 0.475 Std: 0.195
+300: Mean: 3.74 Std: 3.25
+500: Mean: 7.9 Std: 5.86
+700: Mean: 12.9 Std: 11.3
+900: Mean: 21.1 Std: 15.9
+1100: Mean: 18.6 Std: 60.6
+1300: Mean: 30.8 Std: 83.0
+1500: Mean: 38.2 Std: 82.2
+
+Z_threshold0.05 Gap
+100: Mean: 2.48 Std: 2.48
+300: Mean: 1.34 Std: 1.08
+500: Mean: 1.12 Std: 0.922
+700: Mean: 1.09 Std: 0.868
+900: Mean: 1.14 Std: 0.996
+1100: Mean: 1.12 Std: 1.01
+1300: Mean: 1.02 Std: 0.965
+1500: Mean: 0.839 Std: 0.837
+
+Z_threshold0.05 Time
+100: Mean: 0.138 Std: 0.104
+300: Mean: 0.665 Std: 0.391
+500: Mean: 1.32 Std: 0.874
+700: Mean: 2.46 Std: 1.74
+900: Mean: 4.08 Std: 2.98
+1100: Mean: 3.43 Std: 2.8
+1300: Mean: 4.84 Std: 3.83
+1500: Mean: 6.68 Std: 4.69
+
+Z_threshold0.1 Gap
+100: Mean: 4.2 Std: 3.17
+300: Mean: 2.19 Std: 1.18
+500: Mean: 1.89 Std: 1.14
+700: Mean: 1.87 Std: 1.3
+900: Mean: 1.92 Std: 1.33
+1100: Mean: 1.85 Std: 1.3
+1300: Mean: 1.8 Std: 1.35
+1500: Mean: 1.58 Std: 1.19
+
+Z_threshold0.1 Time
+100: Mean: 0.0914 Std: 0.0735
+300: Mean: 0.511 Std: 0.281
+500: Mean: 0.929 Std: 0.562
+700: Mean: 1.6 Std: 0.848
+900: Mean: 2.5 Std: 1.52
+1100: Mean: 2.07 Std: 1.7
+1300: Mean: 2.84 Std: 2.12
+1500: Mean: 3.88 Std: 3.11
+
+Z_threshold0.15 Gap
+100: Mean: 5.65 Std: 3.36
+300: Mean: 2.81 Std: 1.34
+500: Mean: 2.49 Std: 1.47
+700: Mean: 2.42 Std: 1.55
+900: Mean: 2.65 Std: 1.76
+1100: Mean: 2.42 Std: 1.6
+1300: Mean: 2.45 Std: 1.67
+1500: Mean: 2.15 Std: 1.32
+
+Z_threshold0.15 Time
+100: Mean: 0.0653 Std: 0.0491
+300: Mean: 0.415 Std: 0.207
+500: Mean: 0.767 Std: 0.392
+700: Mean: 1.37 Std: 0.66
+900: Mean: 2.18 Std: 1.25
+1100: Mean: 1.65 Std: 1.22
+1300: Mean: 2.26 Std: 1.6
+1500: Mean: 2.9 Std: 1.97
+
+Z_threshold0.2 Gap
+100: Mean: 6.68 Std: 3.55
+300: Mean: 3.4 Std: 1.65
+500: Mean: 2.99 Std: 1.76
+700: Mean: 2.9 Std: 1.76
+900: Mean: 3.2 Std: 2.04
+1100: Mean: 2.94 Std: 1.79
+1300: Mean: 2.97 Std: 1.8
+1500: Mean: 2.75 Std: 1.49
+
+Z_threshold0.2 Time
+100: Mean: 0.0537 Std: 0.0313
+300: Mean: 0.36 Std: 0.148
+500: Mean: 0.689 Std: 0.3
+700: Mean: 1.22 Std: 0.527
+900: Mean: 1.95 Std: 1.03
+1100: Mean: 1.41 Std: 0.933
+1300: Mean: 1.9 Std: 1.28
+1500: Mean: 2.32 Std: 1.25
+
+Z_threshold0.25 Gap
+100: Mean: 7.47 Std: 3.81
+300: Mean: 3.94 Std: 1.97
+500: Mean: 3.42 Std: 2.0
+700: Mean: 3.37 Std: 1.9
+900: Mean: 3.7 Std: 2.29
+1100: Mean: 3.43 Std: 1.97
+1300: Mean: 3.52 Std: 1.93
+1500: Mean: 3.33 Std: 1.7
+
+Z_threshold0.25 Time
+100: Mean: 0.0472 Std: 0.0202
+300: Mean: 0.335 Std: 0.118
+500: Mean: 0.65 Std: 0.278
+700: Mean: 1.1 Std: 0.383
+900: Mean: 1.74 Std: 0.655
+1100: Mean: 1.2 Std: 0.614
+1300: Mean: 1.6 Std: 0.818
+1500: Mean: 2.01 Std: 0.904
+
+Z_threshold0.3 Gap
+100: Mean: 8.27 Std: 4.03
+300: Mean: 4.36 Std: 2.23
+500: Mean: 3.76 Std: 2.16
+700: Mean: 3.78 Std: 2.08
+900: Mean: 4.17 Std: 2.41
+1100: Mean: 3.87 Std: 2.13
+1300: Mean: 4.06 Std: 2.05
+1500: Mean: 3.87 Std: 1.88
+
+Z_threshold0.3 Time
+100: Mean: 0.044 Std: 0.0142
+300: Mean: 0.317 Std: 0.0979
+500: Mean: 0.611 Std: 0.232
+700: Mean: 1.04 Std: 0.299
+900: Mean: 1.58 Std: 0.407
+1100: Mean: 1.06 Std: 0.426
+1300: Mean: 1.41 Std: 0.538
+1500: Mean: 1.79 Std: 0.574
+
+Z_threshold0.35 Gap
+100: Mean: 8.89 Std: 4.17
+300: Mean: 4.75 Std: 2.49
+500: Mean: 4.12 Std: 2.32
+700: Mean: 4.21 Std: 2.25
+900: Mean: 4.62 Std: 2.6
+1100: Mean: 4.32 Std: 2.28
+1300: Mean: 4.53 Std: 2.15
+1500: Mean: 4.4 Std: 2.1
+
+Z_threshold0.35 Time
+100: Mean: 0.0428 Std: 0.0112
+300: Mean: 0.302 Std: 0.0699
+500: Mean: 0.575 Std: 0.177
+700: Mean: 0.984 Std: 0.199
+900: Mean: 1.51 Std: 0.286
+1100: Mean: 0.982 Std: 0.251
+1300: Mean: 1.3 Std: 0.272
+1500: Mean: 1.61 Std: 0.211
+
+Z_threshold0.4 Gap
+100: Mean: 9.5 Std: 4.26
+300: Mean: 5.02 Std: 2.67
+500: Mean: 4.45 Std: 2.49
+700: Mean: 4.57 Std: 2.4
+900: Mean: 5.04 Std: 2.75
+1100: Mean: 4.71 Std: 2.43
+1300: Mean: 4.96 Std: 2.27
+1500: Mean: 4.88 Std: 2.27
+
+Z_threshold0.4 Time
+100: Mean: 0.0413 Std: 4.950e-03
+300: Mean: 0.295 Std: 0.0571
+500: Mean: 0.55 Std: 0.128
+700: Mean: 0.943 Std: 0.123
+900: Mean: 1.45 Std: 0.161
+1100: Mean: 0.938 Std: 0.163
+1300: Mean: 1.24 Std: 0.077
+1500: Mean: 1.59 Std: 0.0932
+
+Z_threshold0.45 Gap
+100: Mean: 10.0 Std: 4.35
+300: Mean: 5.27 Std: 2.89
+500: Mean: 4.77 Std: 2.67
+700: Mean: 4.94 Std: 2.56
+900: Mean: 5.42 Std: 2.88
+1100: Mean: 5.05 Std: 2.58
+1300: Mean: 5.32 Std: 2.38
+1500: Mean: 5.27 Std: 2.43
+
+Z_threshold0.45 Time
+100: Mean: 0.0416 Std: 4.670e-03
+300: Mean: 0.292 Std: 0.0485
+500: Mean: 0.535 Std: 0.0889
+700: Mean: 0.921 Std: 0.0716
+900: Mean: 1.43 Std: 0.0948
+1100: Mean: 0.918 Std: 0.0513
+1300: Mean: 1.23 Std: 0.0667
+1500: Mean: 1.59 Std: 0.0893
+
+Z_threshold0.5 Gap
+100: Mean: 10.4 Std: 4.5
+300: Mean: 5.49 Std: 3.08
+500: Mean: 5.03 Std: 2.83
+700: Mean: 5.29 Std: 2.75
+900: Mean: 5.73 Std: 2.98
+1100: Mean: 5.36 Std: 2.75
+1300: Mean: 5.64 Std: 2.52
+1500: Mean: 5.61 Std: 2.61
+
+Z_threshold0.5 Time
+100: Mean: 0.0416 Std: 4.760e-03
+300: Mean: 0.285 Std: 0.0321
+500: Mean: 0.528 Std: 0.0676
+700: Mean: 0.917 Std: 0.0413
+900: Mean: 1.44 Std: 0.0745
+1100: Mean: 0.913 Std: 0.0479
+1300: Mean: 1.23 Std: 0.0702
+1500: Mean: 1.59 Std: 0.0943
+

@@ -52,7 +52,7 @@ class Instance:
         if feature.name in self.features.keys():
             return torch.tensor(self.features[feature.name])
         output = feature.batch_evaluate(self)
-        self.features[feature.name] = output.numpy().tolist()
+        #self.features[feature.name] = output.numpy().tolist()
         return output
     
         

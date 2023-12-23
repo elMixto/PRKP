@@ -4,7 +4,7 @@ import logging
 from enum import Enum,auto
 from dataclasses import dataclass, field
 from dataclasses_json import dataclass_json
-from src.data_structures import instance
+from src.data_structures import Instance
 
 class VAR_TYPE(Enum):
     CONTINOUS = auto()
@@ -30,11 +30,10 @@ class SolverConfig:
         return cls(VAR_TYPE.CONTINOUS,False,[],None,None,False)
 
 
-def solve_polynomial_knapsack(instance: instance, solver_config: SolverConfig):
+def solve_polynomial_knapsack(instance: Instance, solver_config: SolverConfig):
     n_items = instance.n_items
     items = range(instance.n_items)
     n_hog = len(instance.polynomial_gains)
-    hogs = range(n_hog)
     
     if solver_config.var_type == VAR_TYPE.CONTINOUS:
         var_type = GRB.CONTINUOUS
@@ -44,9 +43,9 @@ def solve_polynomial_knapsack(instance: instance, solver_config: SolverConfig):
     problem_name = "polynomial_knapsack"
     logging.info("{}".format(problem_name))
     model = Model(problem_name)
-    X = model.addVars(n_items,lb=0,ub=1,vtype=var_type,name='X')  
-    Z = model.addVars(n_hog,lb=0,ub=1,vtype=var_type,name='Z')
-    Pi = model.addVars(n_items,lb=0,vtype=GRB.CONTINUOUS,name='Pi')
+    X =   model.addVars(n_items,lb=0,ub=1,vtype=var_type,name='X')  
+    Z =   model.addVars(n_hog,lb=0,ub=1,vtype=var_type,name='Z')
+    Pi =  model.addVars(n_items,lb=0,vtype=GRB.CONTINUOUS,name='Pi')
     Rho = model.addVar(lb=0,vtype=GRB.CONTINUOUS,name='Rho')
 
     obj_funct = quicksum(instance.profits[i] * X[i] for i in items)
@@ -72,11 +71,10 @@ def solve_polynomial_knapsack(instance: instance, solver_config: SolverConfig):
             model.addConstr(quicksum(X[i] for i in key) >= len(key) * Z[h],"hog {}".format(h))
         else:
             model.addConstr(quicksum(X[i] for i in key) <= len(key) - 1 + Z[h],"hog {}".format(h))
+    
     if solver_config.heuristic:
         for index, i in enumerate(solver_config.indexes):
-            if i == -1:
-                continue
-            elif i == 1:
+            if i == 1:
                 model.addConstr(X[index] >= 1, "mathheur_constr{}".format(i))
             elif i == 0:
                 model.addConstr(X[index] == 0, "mathheur_constr{}".format(i))
